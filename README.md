@@ -14,7 +14,7 @@ Vaultberry is a secure vault system powered by Raspberry Pi, designed to provide
 2. Clone the repository into the `/var/www/html/vaultberry` directory on your Raspberry Pi:
 
 ```bash
-   git clone https://github.com/your-username/vaultberry.git /var/www/html/vaultberry
+   git clone https://github.com/osaajani/vaultberry.git /var/www/html/vaultberry
    cd /var/www/html/vaultberry/ && ./install.sh
 ```
 
