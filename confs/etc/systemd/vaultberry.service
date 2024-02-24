@@ -1,0 +1,11 @@
+[Unit]
+Description=Vaultberry Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /var/www/html/vaultberry/vaultberry.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
