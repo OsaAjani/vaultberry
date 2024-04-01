@@ -148,7 +148,7 @@ def key_pressed(key) :
         enter_code(key)
 
     # If we are in master code mode
-    if CURRENT_STATE & MASTER_CODE :
+    if CURRENT_STATE & STATE_MASTER_CODE :
         enter_master_code(key)
 
 
@@ -204,9 +204,9 @@ def main() :
                 update_state(STATE_HOME)
                 continue
 
-            if CURRENT_STATE == MASTER_CODE :
-                if PREVIOUS_STATE != MASTER_CODE :
-                    update_state(CURRENT_STATE)
+            if CURRENT_STATE == STATE_MASTER_CODE :
+                if PREVIOUS_STATE != STATE_MASTER_CODE :
+                    update_state(CURRENT_STATE) # Re-update to show message only one time
                     pprint('SUPER...')
                     time.sleep(0.5)
                     continue           
