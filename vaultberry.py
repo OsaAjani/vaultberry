@@ -118,6 +118,7 @@ def enter_code(key) :
     elif CURRENT_CODE in SPECIAL_CODES :
         update_state(SPECIAL_CODES[CURRENT_CODE])
         CURRENT_CODE = ""
+        return
 
 
 def enter_master_code(key) :
@@ -146,10 +147,12 @@ def key_pressed(key) :
     # If we are on home or in enter code mode
     if CURRENT_STATE & (STATE_HOME | STATE_ENTER_CODE) :
         enter_code(key)
+        return
 
     # If we are in master code mode
     if CURRENT_STATE & STATE_MASTER_CODE :
         enter_master_code(key)
+        return
 
 
 def main() :
