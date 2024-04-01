@@ -148,7 +148,7 @@ def key_pressed(key) :
         enter_code(key)
 
     # If we are in master code mode
-    if CURRENT_STATE & (MASTER_CODE) :
+    if CURRENT_STATE & MASTER_CODE :
         enter_master_code(key)
 
 
