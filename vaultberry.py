@@ -40,6 +40,7 @@ import time
 
 CORRECT_CODE = "1234" # Code to open
 CURRENT_CODE = ""
+MASTER_CODE = "000000"
 SHOW_CODE = False # If true show code in plaintext, else show *
 # Configure LCD back light behaviour 
 # If "on", light always on, if "auto" stop after 10s of inactivity, if "off" always off
@@ -60,6 +61,14 @@ STATE_HOME = 1
 STATE_ENTER_CODE = 2
 STATE_INVALID_CODE = 4
 STATE_VALID_CODE = 8
+STATE_MASTER_CODE = 16
+STATE_RESET_CODE_START = 32
+STATE_RESET_CODE_END = 32
+
+# Special codes that must trigger particular states
+SPECIAL_CODES = {
+    '##': STATE_MASTER_CODE,
+}
 
 LCD_BACKLIGHT_STATE = False if LCD_BACKLIGHT == "off" else True
 PREVIOUS_STATE = STATE_INITIALIZE
@@ -105,7 +114,24 @@ def enter_code(key) :
     
     elif len(CURRENT_CODE) >= len(CORRECT_CODE) :
         return update_state(STATE_INVALID_CODE)
+    
+    elif CURRENT_CODE in SPECIAL_CODES :
+        update_state(SPECIAL_CODES[CURRENT_CODE])
+        CURRENT_CODE = ""
 
+
+def enter_master_code(key) :
+    global CURRENT_CODE
+    
+    CURRENT_CODE += key
+    pprint('Code:\n{}'.format(CURRENT_CODE if SHOW_CODE else '*' * len(CURRENT_CODE)))
+          
+    if CURRENT_CODE == MASTER_CODE :
+        return update_state(STATE_VALID_CODE)
+    
+    elif len(CURRENT_CODE) >= len(MASTER_CODE) :
+        return update_state(STATE_INVALID_CODE)
+    
 
 def key_pressed(key) :
     global LAST_ACTION_AT, LCD_BACKLIGHT_STATE
@@ -120,6 +146,11 @@ def key_pressed(key) :
     # If we are on home or in enter code mode
     if CURRENT_STATE & (STATE_HOME | STATE_ENTER_CODE) :
         enter_code(key)
+
+    # If we are in master code mode
+    if CURRENT_STATE & (MASTER_CODE) :
+        enter_master_code(key)
+
 
 def main() :
     global display, servo, keypad, LCD_BACKLIGHT_STATE, CURRENT_CODE
@@ -172,6 +203,13 @@ def main() :
                 CURRENT_CODE = ""
                 update_state(STATE_HOME)
                 continue
+
+            if CURRENT_STATE == MASTER_CODE :
+                if PREVIOUS_STATE != MASTER_CODE :
+                    update_state(CURRENT_STATE)
+                    pprint('SUPER...')
+                    time.sleep(0.5)
+                    continue           
 
             time.sleep(0.5)
 

@@ -14,7 +14,7 @@ pip install --break-system-packages -r requirements.txt
 systemctl enable pigpiod
 
 # Enable i2c interface on the pi (yes 0 is for enable, strangely)
-sudo raspi-config nonint do_i2c 0
+raspi-config nonint do_i2c 0
 
 # Enable PWM on the pi if not already done
 line="dtoverlay=pwm-2chan"
@@ -26,7 +26,7 @@ fi
 # Copy systemd daemon conf and load it
 cp -r ./confs/* /
 systemctl daemon-reload
-sudo systemctl enable vaultberry.service
+systemctl enable vaultberry.service
 
 # Reboot
 reboot
